@@ -1,0 +1,108 @@
+<template>
+    <lightning-card>
+        <table aria-multiselectable="true" class="slds-table slds-table_bordered slds-table_fixed-layout slds-table_resizable-cols" role="grid" aria-label="Example advanced table of Opportunities with header menu button">
+            <thead>
+                <th class="slds-text-align_center slds-cell_action-mode" scope="col" style="width:3.25rem">
+                    <div class="slds-truncate">
+                        <lightning-input onchange={handleAllRowCheck} type="checkbox"></lightning-input>
+                    </div>
+                </th>
+                <th>
+                    Creditor
+                </th>
+                <th>
+                    First Name
+                </th>
+                <th>
+                    Last Name
+                </th>
+                <th>
+                    Min Pay %
+                </th>
+                <th>
+                    Balance
+                </th>
+            </thead>
+            <tbody>
+                <template for:each={tableData} for:item="tableRow">
+                    <tr key={tableRow.id}>
+                        <td class="" role="gridcell">
+                            <div>
+                                <lightning-input onchange={handleInputChange} onclick={handleRowCheck} class="singleCheckbox" type="checkbox" value={tableRow.id} data-id={tableRow.id}></lightning-input>
+                            </div>
+                        </td>
+                        <td role="gridcell">
+                            <template if:false={tableRow.isEdit}>
+                                <div class="slds-truncate" title={tableRow.creditorName} data-id={tableRow.id}>{tableRow.creditorName}</div>
+                            </template>
+                            <template if:true={tableRow.isEdit}>
+                                <lightning-input onchange={handleInputChange} class={tableRow.id} value={tableRow.creditorName} data-id={tableRow.id} data-name="creditorName"></lightning-input>
+                            </template>
+                        </td>
+                        <td role="gridcell">
+                            <template if:false={tableRow.isEdit}>
+                                <div class="slds-truncate" title={tableRow.firstName}>{tableRow.firstName}</div>
+                            </template>
+                            <template if:true={tableRow.isEdit}>
+                                <lightning-input onchange={handleInputChange} class={tableRow.id} value={tableRow.firstName} data-id={tableRow.id} data-name="firstName"></lightning-input>
+                            </template>
+                        </td>
+                        <td role="gridcell">
+                            <template if:false={tableRow.isEdit}>
+                                <div class="slds-truncate" title={tableRow.lastName}>{tableRow.lastName}</div>
+                            </template>
+                            <template if:true={tableRow.isEdit}>
+                                <lightning-input onchange={handleInputChange}  class={tableRow.id} value={tableRow.lastName} data-id={tableRow.id} data-name="lastName"></lightning-input>
+                            </template>
+                        </td>
+                        <td role="gridcell">
+                            <template if:false={tableRow.isEdit}>
+                                <div class="slds-truncate" title={tableRow.minPaymentPercentage}>{tableRow.minPaymentPercentage}%</div>
+                            </template>
+                            <template if:true={tableRow.isEdit}>
+                                <lightning-input onchange={handleInputChange} class={tableRow.id} type="number" value={tableRow.minPaymentPercentage} data-id={tableRow.id} data-name="minPaymentPercentage"></lightning-input>
+                            </template>
+                        </td>
+                        <td role="gridcell">
+                            <template if:false={tableRow.isEdit}>
+                                <div class="slds-truncate" title={tableRow.balance}><lightning-formatted-number value={tableRow.balance} maximum-fraction-digits="2"></lightning-formatted-number></div>
+                            </template>
+                            <template if:true={tableRow.isEdit}>
+                                <lightning-input type="number" onchange={handleInputChange} class={tableRow.id} value={tableRow.balance} data-id={tableRow.id} data-name="balance"></lightning-input>
+                            </template>
+                        </td>
+                        <td>
+                            <lightning-button-icon icon-name="utility:edit" variant="bare" onclick={handleEdit} alternative-text="Edit" data-id={tableRow.id}></lightning-button-icon>
+                            <template if:true={tableRow.isEdit}><lightning-button-icon icon-name="utility:check" variant="bare" onclick={handleRowSave} alternative-text="Edit" data-id={tableRow.id} class="slds-var-p-left_small"></lightning-button-icon></template>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+            <tfoot>
+                <tr class="slds-theme_info slds-text-color_inverse">
+                    <td></td><td role="gridcell"><strong class="slds-var-p-left_x-small">Total</strong></td><td></td><td></td><td></td>
+                    <td role="gridcell"><lightning-formatted-number value={total} format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+                    <td></td>
+                </tr>
+                <tr class="slds-theme_info slds-text-color_inverse">
+                    <td></td><td role="gridcell">
+                        <lightning-button label="Add Debt" onclick={handleAddDebt} variant="brand"></lightning-button>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td role="gridcell"><template if:true={renderRemove}><lightning-button label="Remove" onclick={handleRemove}></lightning-button></template></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-2">
+                <strong class="slds-var-p-left_small">Total row count {totalRows}</strong>
+            </div>
+            <div class="slds-col slds-size_1-of-2 ">
+                <strong>Checked row count {checkedRows}</strong>
+            </div>
+        </div>
+    </lightning-card>
+</template>
